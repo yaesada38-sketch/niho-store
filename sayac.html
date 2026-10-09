@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sayaç</title>
+<style>
+  body{margin:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;font-family:sans-serif;background:#f7f7f7}
+  #n{font-size:72px;font-weight:500}
+  button{padding:12px 28px;border:none;border-radius:24px;background:#3a7bff;color:#fff;font-size:16px}
+  button.g{background:#e6e6e6;color:#000}
+</style>
+</head>
+<body>
+<div id="n">0</div>
+<div><button onclick="add(1)">+1</button> <button class="g" onclick="add(-n)">Sıfırla</button></div>
+<script>
+// Garip OS köprüsü: OS ile postMessage üzerinden konuşur
+var seq = 0, wait = {}, n = 0;
+function garip(cmd, args) {
+  return new Promise(function (res, rej) {
+    var id = ++seq; wait[id] = { res: res, rej: rej };
+    parent.postMessage({ garip: 1, id: id, cmd: cmd, args: args || {} }, '*');
+  });
+}
+window.addEventListener('message', function (e) {
+  var d = e.data; if (!d || d.garip !== 1 || !wait[d.id]) return;
+  d.ok ? wait[d.id].res(d.result) : wait[d.id].rej(d.error); delete wait[d.id];
+});
+function show() { document.getElementById('n').textContent = n; }
+function add(x) { n += x; show(); garip('store.set', { key: 'sayi', value: String(n) }); }
+garip('store.get', { key: 'sayi' }).then(function (v) { n = parseInt(v || '0', 10) || 0; show(); }).catch(function () {});
+</script>
+</body>
+</html>

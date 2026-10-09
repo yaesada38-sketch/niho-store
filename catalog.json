@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "id": "sayac",
+      "name": "Sayaç",
+      "desc": "Basit bir sayaç uygulaması",
+      "long": "Garip OS içinde çalışan örnek uygulama. Sayıyı OS depolamasına kaydeder, kapatıp açsan da kaldığı yerden devam eder.",
+      "icon": "🔢",
+      "color": "#3a7bff",
+      "v": "1.0",
+      "url": "apps/sayac.html"
+    }
+  ]
+}

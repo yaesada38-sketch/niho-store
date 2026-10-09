@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Niho Store</title>
+<style>
+  body{margin:0;font-family:sans-serif;background:#f7f7f7;color:#111}
+  header{background:#1f6feb;color:#fff;padding:18px 20px;font-size:22px;font-weight:500}
+  .row{display:flex;align-items:center;gap:14px;background:#fff;border-radius:16px;margin:12px;padding:14px}
+  .ic{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px}
+  .t{font-size:16px}.d{font-size:13px;color:#888;margin-top:2px}
+  #m{text-align:center;color:#777;padding:40px 20px}
+</style>
+</head>
+<body>
+<header>Niho Store</header>
+<div id="list"></div><div id="m">Yükleniyor…</div>
+<script>
+// Katalog, bu sayfayla aynı klasördeki catalog.json'dan okunur
+fetch('catalog.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
+  var apps = Array.isArray(j) ? j : (j.apps || []);
+  document.getElementById('m').textContent = apps.length ? '' : 'Mağaza şu an boş.';
+  apps.forEach(function (a) {
+    var r = document.createElement('div'); r.className = 'row';
+    var i = document.createElement('div'); i.className = 'ic'; i.style.background = a.color || '#607d8b'; i.textContent = a.icon || '📦';
+    var b = document.createElement('div');
+    var t = document.createElement('div'); t.className = 't'; t.textContent = a.name;
+    var d = document.createElement('div'); d.className = 'd'; d.textContent = a.desc || '';
+    b.appendChild(t); b.appendChild(d); r.appendChild(i); r.appendChild(b);
+    document.getElementById('list').appendChild(r);
+  });
+}).catch(function () { document.getElementById('m').textContent = 'Katalog yüklenemedi.'; });
+</script>
+</body>
+</html>
